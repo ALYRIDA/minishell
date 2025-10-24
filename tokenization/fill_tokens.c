@@ -6,7 +6,7 @@
 /*   By: aareslan <aareslan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/08 23:05:52 by aareslan          #+#    #+#             */
-/*   Updated: 2025/10/23 18:17:11 by aareslan         ###   ########.fr       */
+/*   Updated: 2025/10/24 15:41:11 by aareslan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static int	process_word_char(const char *s, int *i, char **envp,
 {
 	char	*part;
 
-	if (s[*i] == '$' && (s[(*i) + 1] == '\'' || s[(*i) + 1] == '"'))
+	if (s[*i] == '$' && (s[(*i) + 1] == '\'' || s[(*i) + 1] == '"'))//this to handle cases like $"" or $''
 		(*i)++;
 	else if (s[*i] == '"' && handle_double_quote(s, i, envp, ctx))
 		return (1);
