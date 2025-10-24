@@ -6,7 +6,7 @@
 /*   By: aareslan <aareslan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 16:44:06 by aareslan          #+#    #+#             */
-/*   Updated: 2025/10/22 14:38:45 by aareslan         ###   ########.fr       */
+/*   Updated: 2025/10/23 18:17:11 by aareslan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,34 +15,23 @@
 static void	process_input(char *input, char **envp)
 {
 	char	**tokens;
-	int		i;
-	int		quote_status;
 
 	if (*input)
 	{
-		quote_status = check_unclosed_quotes(input);
-		if (quote_status == 1)
-		{
-			printf("minishell: syntax error: unclosed single quote\n");
-			return ;
-		}
-		else if (quote_status == 2)
-		{
-			printf("minishell: syntax error: unclosed double quote\n");
-			return ;
-		}
 		add_history(input);
+		if (check_quotes(input))
+			return ;
 		tokens = tokenize(input, envp);
 		tokens = cleanup_tokens(tokens);
+		if (tokens && check_syntax(tokens))
+		{
+			free_tokens(tokens);
+			return ;
+		}
 		if (tokens)
 		{
 			tokens = expand_tokens(tokens, envp);
-			i = 0;
-			while (tokens[i])
-			{
-				printf("[%d]: %s\n", i, tokens[i]);
-				i++;
-			}
+			display_tokens(tokens);
 			free_tokens(tokens);
 		}
 	}

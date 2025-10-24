@@ -6,141 +6,65 @@
 /*   By: aareslan <aareslan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/08 23:05:52 by aareslan          #+#    #+#             */
-/*   Updated: 2025/10/22 18:02:40 by aareslan         ###   ########.fr       */
+/*   Updated: 2025/10/23 18:17:11 by aareslan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-/* Check if token should be kept (not empty, or explicit empty quotes) */
-static int	should_keep_token(const char *token)
-{
-	int	len;
-
-	if (!token)
-		return (0);
-	len = ft_strlen(token);
-	if (len == 0)
-		return (0);
-	if (len >= 2 && ((token[0] == '\'' && token[len - 1] == '\'')
-			|| (token[0] == '"' && token[len - 1] == '"')))
-		return (1);
-	if (token[0] != '\0')
-		return (1);
-	return (0);
-}
-
 char	**cleanup_tokens(char **tokens)
 {
 	int		count;
-	int		i;
 	char	**clean;
 
-	count = 0;
-	i = 0;
-	while (tokens[i])
-	{
-		if (should_keep_token(tokens[i]) || ft_strcmp(tokens[i], "\x01") == 0)
-			count++;
-		i++;
-	}
+	count = count_valid_tokens(tokens);
 	clean = malloc(sizeof(char *) * (count + 1));
 	if (!clean)
 		return (NULL);
-	i = 0;
-	count = 0;
-	while (tokens[i])
-	{
-		if (ft_strcmp(tokens[i], "\x01") == 0)
-			clean[count++] = ft_strdup("");  /* Convert marker to empty string */
-		else if (should_keep_token(tokens[i]))
-			clean[count++] = ft_strdup(tokens[i]);
-		i++;
-	}
-	clean[count] = NULL;
+	copy_valid_tokens(tokens, clean);
 	free_tokens(tokens);
 	return (clean);
 }
 
-/* Extract unquoted portion that may contain $ for expansion */
-static char	*extract_unquoted_part(const char *s, int *i, char **envp)
+static int	process_word_char(const char *s, int *i, char **envp,
+		t_word_ctx *ctx)
 {
-	int		start;
-	int		j;
-	char	*substr;
-	char	*expanded;
+	char	*part;
 
-	start = *i;
-	j = *i;
-	while (s[j] && s[j] != '\'' && s[j] != '"' && !isspace((unsigned char)s[j])
-		&& s[j] != '|' && s[j] != '<' && s[j] != '>')
-		j++;
-	substr = ft_substr_dup(s, start, j - start);
-	expanded = expand_variables(substr, envp);
-	free(substr);
-	*i = j;
-	return (expanded);
+	if (s[*i] == '$' && (s[(*i) + 1] == '\'' || s[(*i) + 1] == '"'))
+		(*i)++;
+	else if (s[*i] == '"' && handle_double_quote(s, i, envp, ctx))
+		return (1);
+	else if (s[*i] == '\'' && handle_single_quote(s, i, ctx))
+		return (1);
+	else if (s[*i] != '"' && s[*i] != '\'')
+	{
+		part = extract_unquoted_part(s, i, envp);
+		append_str(ctx->current, part, ctx->len);
+		*ctx->had_content = 1;
+		free(part);
+	}
+	return (0);
 }
 
 char	*extract_word(const char *s, int *i, char **envp)
 {
-	char	*current;
-	int		len;
-	char	*part;
-	int		had_content;
+	char		*current;
+	int			len;
+	int			had_content;
+	t_word_ctx	ctx;
 
 	current = ft_strdup("");
 	len = 0;
 	had_content = 0;
+	ctx.current = &current;
+	ctx.len = &len;
+	ctx.had_content = &had_content;
 	while (s[*i] && !isspace((unsigned char)s[*i])
 		&& s[*i] != '|' && s[*i] != '<' && s[*i] != '>')
 	{
-		if (s[*i] == '$' && (s[*i + 1] == '\'' || s[*i + 1] == '"'))
-		{
-			(*i)++;     //skip the dollar sign
-			continue ;  //process quotes normally
-		}
-		if (s[*i] == '"')
-		{
-			part = extract_double_quotes(s, i, envp, 0);
-			if (ft_strcmp(part, "\x01") == 0 && had_content == 0
-				&& (isspace((unsigned char)s[*i]) || s[*i] == '\0'
-					|| s[*i] == '|' || s[*i] == '<' || s[*i] == '>'))
-			{
-				free(current);
-				return (part);  /* Return marker for empty quotes */
-			}
-			if (ft_strcmp(part, "\x01") != 0)
-			{
-				append_str(&current, part, &len);
-				had_content = 1;
-			}
-			free(part);
-		}
-		else if (s[*i] == '\'')
-		{
-			part = extract_single_quotes(s, i);
-			if (ft_strcmp(part, "\x01") == 0 && had_content == 0
-				&& (isspace((unsigned char)s[*i]) || s[*i] == '\0'
-					|| s[*i] == '|' || s[*i] == '<' || s[*i] == '>'))
-			{
-				free(current);
-				return (part);  /* Return marker for empty quotes */
-			}
-			if (ft_strcmp(part, "\x01") != 0)
-			{
-				append_str(&current, part, &len);
-				had_content = 1;
-			}
-			free(part);
-		}
-		else
-		{
-			part = extract_unquoted_part(s, i, envp);
-			append_str(&current, part, &len);
-			had_content = 1;
-			free(part);
-		}
+		if (process_word_char(s, i, envp, &ctx))
+			return (current);
 	}
 	return (current);
 }

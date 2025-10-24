@@ -6,7 +6,7 @@
 /*   By: aareslan <aareslan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 22:24:28 by aareslan          #+#    #+#             */
-/*   Updated: 2025/10/22 16:45:51 by aareslan         ###   ########.fr       */
+/*   Updated: 2025/10/24 15:16:34 by aareslan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,50 +26,21 @@ static void	handle_special_var(char *input, int *i, t_expand_ctx *ctx)
 			free(pid_str);
 		}
 		(*i) += 2;
+		return ;
 	}
-	else if (input[*i + 1] == '@' || input[*i + 1] == '*'
-		|| input[*i + 1] == '#')
-	{
+	if (input[*i + 1] == '@' || input[*i + 1] == '*'
+		|| input[*i + 1] == '#' || ft_isdigit(input[*i + 1]))
 		(*i) += 2;
-	}
-	else if (ft_isdigit(input[*i + 1]))
-	{
-		(*i) += 2;
-	}
 	else
-	{
 		append_char(ctx->res, input[(*i)++], ctx->len);
-	}
 }
 
-/* Handle $VAR or $? or special variables */
-void	handle_dollar(char *input, int *i, t_expand_ctx *ctx)
+/* Handle environment variable expansion */
+static void	handle_env_var(char *input, int *i, t_expand_ctx *ctx)
 {
 	char	*name;
 	char	*value;
 
-	if (input[*i + 1] == '\'' || input[*i + 1] == '"')
-	{
-		(*i)++;
-		return ;
-	}
-	if (input[*i + 1] == '?')
-	{
-		expand_exit_code(ctx->res, ctx->len, i);
-		return ;
-	}
-	else if (input[*i + 1] == '$' || input[*i + 1] == '@'
-		|| input[*i + 1] == '*' || input[*i + 1] == '#'
-		|| ft_isdigit(input[*i + 1]))
-	{
-		handle_special_var(input, i, ctx);
-		return ;
-	}
-	else if (!ft_isalnum(input[*i + 1]) && input[*i + 1] != '_')
-	{
-		append_char(ctx->res, input[(*i)++], ctx->len);
-		return ;
-	}
 	name = get_var_name(input, i);
 	if (!name)
 		return ;
@@ -77,4 +48,29 @@ void	handle_dollar(char *input, int *i, t_expand_ctx *ctx)
 	if (value)
 		append_str(ctx->res, value, ctx->len);
 	free(name);
+}
+
+/* Handle $VAR or $? or special variables */
+void	handle_dollar(char *input, int *i, t_expand_ctx *ctx)
+{
+	if (input[*i + 1] == '\'' || input[*i + 1] == '"')
+		return ((void)((*i)++));
+	if (input[*i + 1] == '?')
+	{
+		expand_exit_code(ctx->res, ctx->len, i);
+		return ;
+	}
+	if (input[*i + 1] == '$' || input[*i + 1] == '@'
+		|| input[*i + 1] == '*' || input[*i + 1] == '#'
+		|| ft_isdigit(input[*i + 1]))
+	{
+		handle_special_var(input, i, ctx);
+		return ;
+	}
+	if (!ft_isalnum(input[*i + 1]) && input[*i + 1] != '_')
+	{
+		append_char(ctx->res, input[(*i)++], ctx->len);
+		return ;
+	}
+	handle_env_var(input, i, ctx);
 }
