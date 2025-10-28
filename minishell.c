@@ -6,7 +6,7 @@
 /*   By: aareslan <aareslan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 16:44:06 by aareslan          #+#    #+#             */
-/*   Updated: 2025/10/23 18:17:11 by aareslan         ###   ########.fr       */
+/*   Updated: 2025/10/27 18:45:35 by aareslan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 static void	process_input(char *input, char **envp)
 {
-	char	**tokens;
+	char		**tokens;
+	t_ast_node	*ast;
 
 	if (*input)
 	{
@@ -32,6 +33,12 @@ static void	process_input(char *input, char **envp)
 		{
 			tokens = expand_tokens(tokens, envp);
 			display_tokens(tokens);
+			ast = parse_tokens(tokens);
+			if (ast)
+			{
+				print_ast(ast);
+				free_ast(ast);
+			}
 			free_tokens(tokens);
 		}
 	}

@@ -6,7 +6,7 @@
 /*   By: aareslan <aareslan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 16:44:29 by aareslan          #+#    #+#             */
-/*   Updated: 2025/10/24 15:33:45 by aareslan         ###   ########.fr       */
+/*   Updated: 2025/10/28 12:41:44 by aareslan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,15 @@ typedef enum e_ast_type
 	AST_REDIR_APPEND,
 	AST_REDIR_HEREDOC
 }	t_ast_type;
+
+typedef struct s_ast_node
+{
+	t_ast_type			type;
+	char				**args;
+	char				*filename;
+	struct s_ast_node	*left;
+	struct s_ast_node	*right;
+}	t_ast_node;
 
 static volatile sig_atomic_t	g_signal;
 
@@ -126,5 +135,17 @@ int			ft_tablen(char **tab);;
 char		**expand_tokens(char **tokens, char **envp);
 
 char		**cleanup_tokens(char **tokens);
+
+/* parsing */
+t_ast_node	*parse_tokens(char **tokens);
+t_ast_node	*create_ast_node(t_ast_type type);
+void		free_ast(t_ast_node *node);
+void		print_ast(t_ast_node *node);
+t_ast_type	get_redir_type(char *token);
+int			is_redirection(char *token);
+t_ast_node	*parse_simple_command(char **tokens, int *i);
+t_ast_node	*parse_redirection(char **tokens, int *i);
+t_ast_node	*parse_cmd_with_redirections(char **tokens, int *i);
+t_ast_node	*parse_pipeline(char **tokens);
 
 #endif

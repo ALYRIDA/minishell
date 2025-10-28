@@ -6,7 +6,7 @@
 #    By: aareslan <aareslan@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/02 16:44:09 by aareslan          #+#    #+#              #
-#    Updated: 2025/10/24 15:39:46 by aareslan         ###   ########.fr        #
+#    Updated: 2025/10/27 19:43:47 by aareslan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,6 +33,12 @@ SRC = minishell.c \
 	tokenization/free_tokens.c \
 	tokenization/syntax_checker.c \
 	tokenization/tokenizer.c \
+	parsing/parser.c \
+	parsing/parser_utils.c \
+	parsing/parse_command.c \
+	parsing/parse_redirection.c \
+	parsing/parse_pipeline.c \
+	parsing/ast_utils.c \
 	expansion/append_utils.c \
 	expansion/expand_exit_code.c\
 	expansion/expand_tokens.c\
