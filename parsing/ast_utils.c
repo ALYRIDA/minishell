@@ -6,7 +6,7 @@
 /*   By: aareslan <aareslan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 16:00:00 by aareslan          #+#    #+#             */
-/*   Updated: 2025/10/27 19:43:47 by aareslan         ###   ########.fr       */
+/*   Updated: 2025/10/28 20:31:07 by aareslan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,19 +28,10 @@ static void	print_ast_type(t_ast_type type)
 		printf("REDIR_HEREDOC");
 }
 
-static void	print_ast_helper(t_ast_node *node, int depth)
+static void	print_node_info(t_ast_node *node)
 {
 	int	i;
-	int	j;
 
-	if (!node)
-		return ;
-	j = 0;
-	while (j < depth)
-	{
-		printf("  ");
-		j++;
-	}
 	print_ast_type(node->type);
 	if (node->type == AST_COMMAND && node->args)
 	{
@@ -57,6 +48,21 @@ static void	print_ast_helper(t_ast_node *node, int depth)
 	else if (node->filename)
 		printf(" -> %s", node->filename);
 	printf("\n");
+}
+
+static void	print_ast_helper(t_ast_node *node, int depth)
+{
+	int	j;
+
+	if (!node)
+		return ;
+	j = 0;
+	while (j < depth)
+	{
+		printf("  ");
+		j++;
+	}
+	print_node_info(node);
 	if (node->left)
 		print_ast_helper(node->left, depth + 1);
 	if (node->right)

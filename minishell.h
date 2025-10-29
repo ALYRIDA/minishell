@@ -6,7 +6,7 @@
 /*   By: aareslan <aareslan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 16:44:29 by aareslan          #+#    #+#             */
-/*   Updated: 2025/10/28 12:41:44 by aareslan         ###   ########.fr       */
+/*   Updated: 2025/10/29 13:22:24 by aareslan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <fcntl.h>
+# include <sys/wait.h>
 
 typedef struct s_expand_ctx
 {
