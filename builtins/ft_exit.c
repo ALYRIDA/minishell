@@ -1,25 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expand_exit_code.c                                 :+:      :+:    :+:   */
+/*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aareslan <aareslan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/13 22:30:08 by aareslan          #+#    #+#             */
-/*   Updated: 2025/10/24 15:18:34 by aareslan         ###   ########.fr       */
+/*   Created: 2025/11/07 16:30:00 by aareslan          #+#    #+#             */
+/*   Updated: 2025/11/07 16:30:00 by aareslan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	expand_exit_code(char **res, int *len, int *i)
+int	ft_exit(char **args)
 {
-	char	*exit_code;
+	int	exit_code;
 
-	(*i) += 2;
-	exit_code = ft_itoa(get_exit_status());
-	if (!exit_code)
-		return ;
-	append_str(res, exit_code, len);
-	free(exit_code);
+	write(1, "exit\n", 5);
+	if (!args[1])
+		exit(0);
+	exit_code = ft_atoi(args[1]);
+	if (exit_code < 0 || exit_code > 255)
+		exit_code = exit_code % 256;
+	exit(exit_code);
+	return (0);
 }

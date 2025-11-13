@@ -6,7 +6,7 @@
 /*   By: aareslan <aareslan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 14:00:00 by aareslan          #+#    #+#             */
-/*   Updated: 2025/10/24 15:39:27 by aareslan         ###   ########.fr       */
+/*   Updated: 2025/11/07 18:38:37 by aareslan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,16 +81,4 @@ int	check_quotes(char *input)
 		return (1);
 	}
 	return (0);
-}
-
-void	display_tokens(char **tokens)
-{
-	int	i;
-
-	i = 0;
-	while (tokens[i])
-	{
-		printf("[%d]: %s\n", i, tokens[i]);
-		i++;
-	}
 }

@@ -6,7 +6,7 @@
 /*   By: aareslan <aareslan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 16:00:00 by aareslan          #+#    #+#             */
-/*   Updated: 2025/10/27 19:43:47 by aareslan         ###   ########.fr       */
+/*   Updated: 2025/11/11 22:52:06 by aareslan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ t_ast_node	*create_ast_node(t_ast_type type)
 	node->type = type;
 	node->args = NULL;
 	node->filename = NULL;
+	node->heredoc_expand = 1;
 	node->left = NULL;
 	node->right = NULL;
 	return (node);

@@ -6,11 +6,19 @@
 /*   By: aareslan <aareslan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 16:44:21 by aareslan          #+#    #+#             */
-/*   Updated: 2025/10/28 15:37:24 by aareslan         ###   ########.fr       */
+/*   Updated: 2025/11/11 21:28:13 by aareslan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+// Signal handler for heredoc (in child process)
+static void	handle_sigint_heredoc(int sig)
+{
+	(void)sig;
+	write(1, "\n", 1);
+	exit(130);
+}
 
 // rl_on_new_line  : tells Readline that the cursor is on a new line.
 // rl_replace_line : clears the current input line.
@@ -42,14 +50,18 @@ void	setup_signals(void)
 	signal(SIGTSTP, SIG_IGN);
 }
 
-// int	get_signal(void)        :return the current value of the g_signal.
-int	get_signal(void)
+// Setup signals for heredoc child process
+void	setup_heredoc_signals(void)
 {
-	return (g_signal);
+	signal(SIGINT, handle_sigint_heredoc);
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGTSTP, SIG_IGN);
 }
 
-// void	reset_signal(void)      :set it to 0.
-void	reset_signal(void)
+// Setup signals for child processes (external commands)
+void	setup_child_signals(void)
 {
-	g_signal = 0;
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
+	signal(SIGTSTP, SIG_DFL);
 }

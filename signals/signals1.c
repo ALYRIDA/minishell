@@ -1,25 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expand_exit_code.c                                 :+:      :+:    :+:   */
+/*   signals1.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aareslan <aareslan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/13 22:30:08 by aareslan          #+#    #+#             */
-/*   Updated: 2025/10/24 15:18:34 by aareslan         ###   ########.fr       */
+/*   Created: 2025/11/11 21:18:10 by aareslan          #+#    #+#             */
+/*   Updated: 2025/11/11 21:18:40 by aareslan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	expand_exit_code(char **res, int *len, int *i)
+// Setup signals for parent waiting on child
+void	setup_parent_signals(void)
 {
-	char	*exit_code;
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGTSTP, SIG_IGN);
+}
 
-	(*i) += 2;
-	exit_code = ft_itoa(get_exit_status());
-	if (!exit_code)
-		return ;
-	append_str(res, exit_code, len);
-	free(exit_code);
+// int	get_signal(void)        :return the current value of the g_signal.
+int	get_signal(void)
+{
+	return (g_signal);
+}
+
+// void	reset_signal(void)      :set it to 0.
+void	reset_signal(void)
+{
+	g_signal = 0;
 }

@@ -1,25 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expand_exit_code.c                                 :+:      :+:    :+:   */
+/*   is_builtin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aareslan <aareslan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/13 22:30:08 by aareslan          #+#    #+#             */
-/*   Updated: 2025/10/24 15:18:34 by aareslan         ###   ########.fr       */
+/*   Created: 2025/10/30 12:18:59 by aareslan          #+#    #+#             */
+/*   Updated: 2025/11/06 15:01:15 by aareslan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	expand_exit_code(char **res, int *len, int *i)
+int	is_builtin(char *cmd)
 {
-	char	*exit_code;
-
-	(*i) += 2;
-	exit_code = ft_itoa(get_exit_status());
-	if (!exit_code)
-		return ;
-	append_str(res, exit_code, len);
-	free(exit_code);
+	if (!cmd)
+		return (0);
+	return ((ft_strcmp(cmd, "echo") == 0)
+		|| (ft_strcmp(cmd, "cd") == 0)
+		|| (ft_strcmp(cmd, "pwd") == 0)
+		|| (ft_strcmp(cmd, "export") == 0)
+		|| (ft_strcmp(cmd, "unset") == 0)
+		|| (ft_strcmp(cmd, "env") == 0)
+		|| (ft_strcmp(cmd, "exit") == 0));
 }

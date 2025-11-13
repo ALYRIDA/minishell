@@ -6,11 +6,24 @@
 /*   By: aareslan <aareslan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/14 09:20:46 by aareslan          #+#    #+#             */
-/*   Updated: 2025/10/24 15:44:24 by aareslan         ###   ########.fr       */
+/*   Updated: 2025/11/12 11:05:14 by aareslan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static char	*mark_quoted_str(char *expanded)
+{
+	char	*marked;
+
+	marked = malloc(ft_strlen(expanded) + 2);
+	if (!marked)
+		return (expanded);
+	marked[0] = '\x02';
+	strcpy(marked + 1, expanded);
+	free(expanded);
+	return (marked);
+}
 
 char	*extract_double_quotes(const char *s, int *i,
 		char **envp, int in_single)
@@ -28,13 +41,10 @@ char	*extract_double_quotes(const char *s, int *i,
 	if (s[*i] == '"')
 		(*i)++;
 	if (ft_strlen(content) == 0)
-	{
-		free(content);
-		return (ft_strdup("\x01"));  /* Marker for empty quoted string */
-	}
+		return (free(content), ft_strdup("\x01"));
 	expanded = expand_variables(content, envp);
 	free(content);
-	return (expanded);
+	return (mark_quoted_str(expanded));
 }
 
 char	*extract_single_quotes(const char *s, int *i)
@@ -42,7 +52,7 @@ char	*extract_single_quotes(const char *s, int *i)
 	int		start;
 	char	*content;
 
-	(*i)++; // skip opening '
+	(*i)++;
 	start = *i;
 	while (s[*i] && s[*i] != '\'')
 		(*i)++;
@@ -50,11 +60,8 @@ char	*extract_single_quotes(const char *s, int *i)
 	if (s[*i] == '\'')
 		(*i)++;
 	if (ft_strlen(content) == 0)
-	{
-		free(content);
-		return (ft_strdup("\x01"));  /* Marker for empty quoted string */
-	}
-	return (content);
+		return (free(content), ft_strdup("\x01"));
+	return (mark_quoted_str(content));
 }
 
 int	check_unclosed_quotes(const char *s)
@@ -75,8 +82,8 @@ int	check_unclosed_quotes(const char *s)
 		i++;
 	}
 	if (single % 2 != 0)
-		return (1); // unclosed single
+		return (1);
 	if (dbl % 2 != 0)
-		return (2); // unclosed double
+		return (2);
 	return (0);
 }

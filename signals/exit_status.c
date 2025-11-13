@@ -1,45 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_helpme_3.c                                   :+:      :+:    :+:   */
+/*   exit_status.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aareslan <aareslan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/09 16:50:36 by aareslan          #+#    #+#             */
-/*   Updated: 2025/11/09 11:18:28 by aareslan         ###   ########.fr       */
+/*   Created: 2025/09/02 16:44:21 by aareslan          #+#    #+#             */
+/*   Updated: 2025/11/09 12:25:43 by aareslan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_strcmp(char *s1, char *s2)
+void	set_exit_status(int status)
 {
-	int	i;
-
-	i = 0;
-	while (s1[i] && s2[i] && s1[i] == s2[i])
-	{
-		i++;
-	}
-	return (s1[i] - s2[i]);
-}
-
-int	ft_strncmp(const char *s1, const char *s2, size_t n)
-{
-	size_t	i;
-
-	i = 0;
-	while ((s1[i] == s2[i] && s1[i] != '\0' && s2[i] != '\0') && i < n - 1)
-		i++;
-	if (n == 0)
-		return (0);
+	if (status == 0)
+		g_signal = 0;
 	else
-		return (s1[i] - s2[i]);
+		g_signal = -status;
 }
 
-int	ft_isalnum(int c)
+int	get_exit_status(void)
 {
-	if (ft_isalpha(c) || ft_isdigit(c))
-		return (1);
+	if (g_signal <= 0)
+		return (-g_signal);
 	return (0);
 }

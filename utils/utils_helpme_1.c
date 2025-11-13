@@ -6,17 +6,11 @@
 /*   By: aareslan <aareslan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 16:44:14 by aareslan          #+#    #+#             */
-/*   Updated: 2025/09/14 19:48:06 by aareslan         ###   ########.fr       */
+/*   Updated: 2025/11/09 11:20:40 by aareslan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	exit_shell(void)
-{
-	printf("exit\n");
-	exit(0);
-}
 
 int	ft_strlen(const char *str)
 {

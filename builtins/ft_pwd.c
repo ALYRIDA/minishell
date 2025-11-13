@@ -1,45 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_helpme_3.c                                   :+:      :+:    :+:   */
+/*   ft_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aareslan <aareslan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/09 16:50:36 by aareslan          #+#    #+#             */
-/*   Updated: 2025/11/09 11:18:28 by aareslan         ###   ########.fr       */
+/*   Created: 2025/10/22 10:43:31 by skhalil           #+#    #+#             */
+/*   Updated: 2025/11/06 15:20:22 by aareslan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
-int	ft_strcmp(char *s1, char *s2)
+void	printstr(char *str)
 {
 	int	i;
 
 	i = 0;
-	while (s1[i] && s2[i] && s1[i] == s2[i])
+	while (str[i] != '\0')
 	{
+		write(1, &str[i], 1);
 		i++;
 	}
-	return (s1[i] - s2[i]);
 }
 
-int	ft_strncmp(const char *s1, const char *s2, size_t n)
+int	ft_pwd(void)
 {
-	size_t	i;
+	char	*cwd;
 
-	i = 0;
-	while ((s1[i] == s2[i] && s1[i] != '\0' && s2[i] != '\0') && i < n - 1)
-		i++;
-	if (n == 0)
-		return (0);
-	else
-		return (s1[i] - s2[i]);
-}
-
-int	ft_isalnum(int c)
-{
-	if (ft_isalpha(c) || ft_isdigit(c))
+	cwd = getcwd(NULL, 0);
+	if (!cwd)
+	{
+		write(2, "Error getting current directory\n", 32);
 		return (1);
+	}
+	write(1, cwd, ft_strlen(cwd));
+	write(1, "\n", 1);
+	free(cwd);
 	return (0);
 }
