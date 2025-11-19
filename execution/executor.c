@@ -6,14 +6,12 @@
 /*   By: aareslan <aareslan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 21:00:00 by aareslan          #+#    #+#             */
-/*   Updated: 2025/11/12 22:18:49 by aareslan         ###   ########.fr       */
+/*   Updated: 2025/11/18 17:08:44 by aareslan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-/* this for ctrl + c 
-if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
-		return (write(1, "\n", 1), 130);*/
+
 int	execute_command(t_ast_node *node, char ***envp)
 {
 	pid_t	pid;
@@ -21,6 +19,8 @@ int	execute_command(t_ast_node *node, char ***envp)
 
 	if (!node || !node->args || !node->args[0])
 		return (1);
+	// Strip quote markers from all arguments before execution
+	strip_markers_from_args(node->args);
 	if (is_builtin(node->args[0]))
 		return (execute_builtin(node->args, envp));
 	pid = fork();

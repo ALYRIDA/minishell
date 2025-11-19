@@ -6,7 +6,7 @@
 /*   By: aareslan <aareslan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 16:44:29 by aareslan          #+#    #+#             */
-/*   Updated: 2025/11/11 22:52:09 by aareslan         ###   ########.fr       */
+/*   Updated: 2025/11/18 17:10:03 by aareslan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,9 @@ void		fill_tokens(const char *s, char **tokens, char **envp);
 char		*ft_substr_dup(const char *s, int start, int end);
 char		**tokenize(const char *s, char **envp);
 int			check_syntax(char **tokens);
+
+char		*strip_quote_marker(char *str);
+void		strip_markers_from_args(char **args);
 
 /* input validation */
 int			check_quotes(char *input);

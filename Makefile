@@ -6,7 +6,7 @@
 #    By: aareslan <aareslan@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/02 16:44:09 by aareslan          #+#    #+#              #
-#    Updated: 2025/11/11 21:22:47 by aareslan         ###   ########.fr        #
+#    Updated: 2025/11/18 17:09:26 by aareslan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,6 +27,7 @@ SRC = minishell.c \
 	utils/utils_helpme_5.c \
 	utils/utils_helpme_6.c \
 	utils/utils_helpme_7.c \
+	utils/utils_helpme_8.c \
 	tokenization/cleanup_tokens_utils.c \
 	tokenization/count_tokens.c \
 	tokenization/extract_operator.c \
