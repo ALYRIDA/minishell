@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skhalil <skhalil@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aareslan <aareslan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 16:30:00 by aareslan          #+#    #+#             */
-/*   Updated: 2025/11/20 15:40:48 by skhalil          ###   ########.fr       */
+/*   Updated: 2025/12/03 14:06:08 by aareslan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,8 @@ int	find_env_var(char **envp, char *var)
 	i = 0;
 	while (envp[i])
 	{
-		if (ft_strncmp(envp[i], var, var_len) == 0 && envp[i][var_len] == '=')
+		if (ft_strncmp(envp[i], var, var_len) == 0
+			&& (envp[i][var_len] == '=' || envp[i][var_len] == '\0'))
 			return (i);
 		i++;
 	}

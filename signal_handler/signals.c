@@ -6,7 +6,7 @@
 /*   By: aareslan <aareslan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 16:44:21 by aareslan          #+#    #+#             */
-/*   Updated: 2025/12/01 16:41:35 by aareslan         ###   ########.fr       */
+/*   Updated: 2025/12/03 14:15:29 by aareslan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ void	handle_sigint_heredoc(int sig)
 void	handle_sigint_heredoc_parent(int sig)
 {
 	(void)sig;
-	write(1, "\n", 1);
 	g_signal = SIGINT;
 	set_exit_status(130);
 }
