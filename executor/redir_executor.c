@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   redirections_execute.c                             :+:      :+:    :+:   */
+/*   redir_executor.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skhalil <skhalil@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aareslan <aareslan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 20:39:24 by aareslan          #+#    #+#             */
-/*   Updated: 2025/11/26 23:15:32 by skhalil          ###   ########.fr       */
+/*   Updated: 2025/12/07 17:41:11 by aareslan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static int	restore_fds_return(int saved_stdout, int saved_stdin, int status)
 	return (status);
 }
 
-static int	exec_redir_common(t_ast_node *node, char ***envp)
+int	exec_redir_common(t_ast_node *node, char ***envp)
 {
 	int			saved_stdout;
 	int			saved_stdin;

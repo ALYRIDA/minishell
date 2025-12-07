@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   executor_command.c                                 :+:      :+:    :+:   */
+/*   cmd_executor.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aareslan <aareslan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 21:00:00 by aareslan          #+#    #+#             */
-/*   Updated: 2025/12/02 21:32:06 by aareslan         ###   ########.fr       */
+/*   Updated: 2025/12/06 14:18:20 by aareslan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static void	handle_execve_error_path(char *cmd, char *cmd_path)
 
 static void	handle_execve_error(char *cmd, char *cmd_path)
 {
-	if (strchr(cmd, '/'))
+	if (ft_strchr(cmd, '/'))
 		handle_execve_error_path(cmd, cmd_path);
 	else
 	{
@@ -70,15 +70,22 @@ static void	execute_child_process(t_ast_node *node, char ***envp)
 static int	handle_parent_wait(pid_t pid)
 {
 	int	status;
+	int	result;
 
 	setup_parent_signals();
 	waitpid(pid, &status, 0);
-	setup_signals();
 	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
-		return (write(1, "\n", 1), 130);
-	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGQUIT)
-		return (write(2, "Quit (core dumped)\n", 19), 131);
-	return (WIFEXITED(status) * WEXITSTATUS(status) + !WIFEXITED(status));
+		result = 130;
+	else if (WIFSIGNALED(status) && WTERMSIG(status) == SIGQUIT)
+		result = 131;
+	else
+		result = WIFEXITED(status) * WEXITSTATUS(status) + !WIFEXITED(status);
+	setup_signals();
+	if (result == 130)
+		write(1, "\n", 1);
+	else if (result == 131)
+		write(2, "Quit (core dumped)\n", 19);
+	return (result);
 }
 
 int	execute_command(t_ast_node *node, char ***envp)
@@ -88,6 +95,8 @@ int	execute_command(t_ast_node *node, char ***envp)
 	if (!node || !node->args || !node->args[0])
 		return (1);
 	strip_markers_from_args(node->args);
+	if (node->args[0][0] == '\0')
+		return (0);
 	if (is_builtin(node->args[0]))
 		return (execute_builtin(node->args, envp));
 	pid = fork();

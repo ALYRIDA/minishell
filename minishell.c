@@ -6,7 +6,7 @@
 /*   By: aareslan <aareslan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 16:44:06 by aareslan          #+#    #+#             */
-/*   Updated: 2025/12/02 21:32:06 by aareslan         ###   ########.fr       */
+/*   Updated: 2025/12/06 21:56:22 by aareslan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static void	main_loop(char ***local_envp)
 
 	while (1)
 	{
-		input = readline("minishell$ ");
+		input = readline("\001\033[1;32m\002minishell$ \001\033[0m\002");
 		if (handle_exit(input))
 			break ;
 		process_input(input, local_envp);
@@ -71,6 +71,7 @@ void	ft_minishell(char **envp)
 		printf("Error: Failed to copy environment\n");
 		return ;
 	}
+	print_welcome_banner();
 	setup_signals();
 	main_loop(&local_envp);
 	rl_clear_history();

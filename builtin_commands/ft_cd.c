@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skhalil <skhalil@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aareslan <aareslan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 10:49:19 by skhalil           #+#    #+#             */
-/*   Updated: 2025/11/26 23:49:24 by skhalil          ###   ########.fr       */
+/*   Updated: 2025/12/06 21:41:20 by aareslan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,29 +31,55 @@ char	*get_env_value(char **envp, const char *name)
 	return (NULL);
 }
 
-static int	handle_cd_home(char **envp, char **target)
+int	find_env_idx(char **envp, const char *name)
 {
-	char	*value;
+	int	i;
+	int	name_len;
 
-	value = get_env_value(envp, "HOME");
-	if (!value)
+	name_len = ft_strlen((char *)name);
+	i = 0;
+	while (envp[i])
 	{
-		write(2, "minishell: cd: HOME not set\n", 28);
-		return (1);
+		if (ft_strncmp(envp[i], name, name_len) == 0
+			&& envp[i][name_len] == '=')
+			return (i);
+		i++;
 	}
-	*target = value;
-	return (0);
+	return (-1);
 }
 
-static int	change_directory(char *target)
+static void	update_pwd_env(char ***envp, char *old_pwd, char *target)
 {
+	char	*new_pwd;
+
+	new_pwd = getcwd(NULL, 0);
+	if (!new_pwd)
+	{
+		new_pwd = get_new_pwd_fallback(target, envp);
+		if (!new_pwd)
+			return ;
+	}
+	if (old_pwd)
+		update_oldpwd(envp, old_pwd);
+	update_current_pwd(envp, new_pwd);
+	free(new_pwd);
+}
+
+static int	change_directory(char *target, char ***envp)
+{
+	char	*old_pwd;
+
+	old_pwd = getcwd(NULL, 0);
 	if (chdir(target) == -1)
 	{
+		free(old_pwd);
 		write(2, "minishell: cd: ", 15);
 		write(2, target, ft_strlen(target));
 		write(2, ": No such file or directory\n", 29);
 		return (1);
 	}
+	update_pwd_env(envp, old_pwd, target);
+	free(old_pwd);
 	return (0);
 }
 
@@ -73,5 +99,5 @@ int	ft_cd(char **argv, char ***envp)
 	}
 	else
 		target = argv[1];
-	return (change_directory(target));
+	return (change_directory(target, envp));
 }

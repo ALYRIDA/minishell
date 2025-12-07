@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   redirections_heredoc.c                             :+:      :+:    :+:   */
+/*   redir_heredoc_handler.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skhalil <skhalil@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aareslan <aareslan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 20:39:24 by aareslan          #+#    #+#             */
-/*   Updated: 2025/11/26 23:15:32 by skhalil          ###   ########.fr       */
+/*   Updated: 2025/12/07 17:41:11 by aareslan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	process_all_heredocs_first(t_ast_node *node, char ***envp)
 		return (130);
 	if (node->type == AST_REDIR_HEREDOC)
 	{
-		status = execute_heredoc(node, envp);
+		status = collect_pipeline_heredocs(node, envp);
 		if (status == 130)
 			return (130);
 	}

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_helpme_6.c                                   :+:      :+:    :+:   */
+/*   misc_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aareslan <aareslan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 14:00:00 by aareslan          #+#    #+#             */
-/*   Updated: 2025/11/07 18:38:37 by aareslan         ###   ########.fr       */
+/*   Updated: 2025/12/05 19:29:19 by aareslan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,4 +81,17 @@ int	check_quotes(char *input)
 		return (1);
 	}
 	return (0);
+}
+
+char	*ft_strchr(const char *s, int c)
+{
+	while (*s != '\0')
+	{
+		if (*s == (unsigned char)c)
+			return ((char *)s);
+		s++;
+	}
+	if (c == '\0')
+		return ((char *)s);
+	return (NULL);
 }

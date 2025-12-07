@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execute_heredoc.c                                  :+:      :+:    :+:   */
+/*   heredoc_executor.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aareslan <aareslan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 12:18:59 by aareslan          #+#    #+#             */
-/*   Updated: 2025/12/02 21:43:42 by aareslan         ###   ########.fr       */
+/*   Updated: 2025/12/07 17:41:11 by aareslan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,12 @@ static int	handle_heredoc_parent(int *pipe_fd, pid_t pid)
 static int	execute_with_heredoc(int pipe_fd, t_ast_node *node, char ***envp)
 {
 	int	saved_stdin;
+	int	saved_stdout;
 	int	exit_status;
+	t_ast_node	*actual_cmd;
 
 	saved_stdin = dup(STDIN_FILENO);
+	saved_stdout = -1;
 	if (saved_stdin == -1)
 		return (perror("dup"), close(pipe_fd), 1);
 	if (dup2(pipe_fd, STDIN_FILENO) == -1)
@@ -56,7 +59,22 @@ static int	execute_with_heredoc(int pipe_fd, t_ast_node *node, char ***envp)
 		return (1);
 	}
 	close(pipe_fd);
-	exit_status = execute_ast(node->right, envp);
+	if (process_redirections_left_to_right(node->right, &saved_stdin,
+			&saved_stdout) != 0)
+	{
+		if (saved_stdout != -1)
+			(dup2(saved_stdout, STDOUT_FILENO), close(saved_stdout));
+		dup2(saved_stdin, STDIN_FILENO);
+		close(saved_stdin);
+		return (1);
+	}
+	actual_cmd = find_command_node(node->right);
+	exit_status = execute_ast(actual_cmd, envp);
+	if (saved_stdout != -1)
+	{
+		dup2(saved_stdout, STDOUT_FILENO);
+		close(saved_stdout);
+	}
 	if (saved_stdin != STDIN_FILENO)
 	{
 		dup2(saved_stdin, STDIN_FILENO);

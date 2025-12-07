@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   command_path.c                                     :+:      :+:    :+:   */
+/*   cmd_path_resolver.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skhalil <skhalil@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aareslan <aareslan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 21:00:00 by skhalil           #+#    #+#             */
-/*   Updated: 2025/11/26 23:49:24 by skhalil          ###   ########.fr       */
+/*   Updated: 2025/12/05 19:29:39 by aareslan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ char	*resolve_command_path(char *cmd, char **envp)
 {
 	if (!cmd)
 		return (NULL);
-	if (strchr(cmd, '/'))
+	if (ft_strchr(cmd, '/'))
 		return (ft_strdup(cmd));
 	return (find_in_path(cmd, envp));
 }

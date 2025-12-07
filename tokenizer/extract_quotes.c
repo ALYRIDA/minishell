@@ -6,7 +6,7 @@
 /*   By: aareslan <aareslan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/14 09:20:46 by aareslan          #+#    #+#             */
-/*   Updated: 2025/12/02 15:34:34 by aareslan         ###   ########.fr       */
+/*   Updated: 2025/12/05 21:05:17 by aareslan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,11 @@ int	check_unclosed_quotes(const char *s)
 	dbl = 0;
 	while (s[i])
 	{
+		if (s[i] == '\\' && s[i + 1])
+		{
+			i += 2;
+			continue ;
+		}
 		if (s[i] == '\'' && dbl % 2 == 0)
 			single++;
 		else if (s[i] == '"' && single % 2 == 0)

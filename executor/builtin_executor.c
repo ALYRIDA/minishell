@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execute_builtin.c                                  :+:      :+:    :+:   */
+/*   builtin_executor.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skhalil <skhalil@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aareslan <aareslan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 12:18:59 by aareslan          #+#    #+#             */
-/*   Updated: 2025/11/26 23:15:32 by skhalil          ###   ########.fr       */
+/*   Updated: 2025/12/05 19:54:43 by aareslan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,13 @@ int	execute_builtin(char **args, char ***envp)
 	else if (ft_strcmp(args[0], "cd") == 0)
 		return (ft_cd(args, envp));
 	else if (ft_strcmp(args[0], "pwd") == 0)
-		return (ft_pwd());
+		return (ft_pwd(*envp));
 	else if (ft_strcmp(args[0], "export") == 0)
 		return (ft_export(args, envp));
 	else if (ft_strcmp(args[0], "unset") == 0)
 		return (ft_unset(args, envp));
 	else if (ft_strcmp(args[0], "env") == 0)
-		return (ft_env(*envp));
+		return (ft_env(args, *envp));
 	else if (ft_strcmp(args[0], "exit") == 0)
 		return (ft_exit(args));
 	else if (ft_strcmp(args[0], ":") == 0)

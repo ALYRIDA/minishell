@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skhalil <skhalil@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aareslan <aareslan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 16:45:00 by aareslan          #+#    #+#             */
-/*   Updated: 2025/11/26 23:49:24 by skhalil          ###   ########.fr       */
+/*   Updated: 2025/12/05 19:30:03 by aareslan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ int	ft_export(char **argv, char ***envp)
 				write(2, argv[i], ft_strlen(argv[i])),
 				write(2, "': not a valid identifier\n", 26), 1);
 		index = find_env_index(*envp, argv[i]);
-		if (index != -1 && strchr(argv[i], '='))
+		if (index != -1 && ft_strchr(argv[i], '='))
 			(free((*envp)[index]), (*envp)[index] = ft_strdup(argv[i]));
 		else if (index == -1)
 		{

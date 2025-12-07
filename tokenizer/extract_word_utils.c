@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   extract_word_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skhalil <skhalil@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aareslan <aareslan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/23 17:00:00 by aareslan          #+#    #+#             */
-/*   Updated: 2025/11/22 20:46:17 by skhalil          ###   ########.fr       */
+/*   Updated: 2025/12/05 21:05:18 by aareslan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,12 @@ char	*extract_unquoted_part(const char *s, int *i, char **envp)
 	j = *i;
 	while (s[j] && s[j] != '\'' && s[j] != '"' && !isspace((unsigned char)s[j])
 		&& s[j] != '|' && s[j] != '<' && s[j] != '>')
-		j++;
+	{
+		if (s[j] == '\\' && s[j + 1])
+			j += 2;
+		else
+			j++;
+	}
 	substr = ft_substr_dup(s, start, j - start);
 	expanded = expand_variables(substr, envp);
 	free(substr);

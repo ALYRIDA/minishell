@@ -6,7 +6,7 @@
 /*   By: aareslan <aareslan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/23 15:36:33 by skhalil           #+#    #+#             */
-/*   Updated: 2025/11/12 16:44:55 by aareslan         ###   ########.fr       */
+/*   Updated: 2025/12/05 21:10:50 by aareslan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,15 @@ t_env	*create_env_node(char *env_str)
 	char	*equal_sign;
 	size_t	key_len;
 
-	equal_sign = strchr(env_str, '=');
+	equal_sign = ft_strchr(env_str, '=');
 	if (!equal_sign)
 		return (NULL);
 	node = malloc(sizeof(t_env));
 	if (!node)
 		return (NULL);
 	key_len = equal_sign - env_str;
-	node->key = strndup(env_str, key_len);
-	node->value = strdup(equal_sign + 1);
+	node->key = ft_strndup(env_str, key_len);
+	node->value = ft_strdup(equal_sign + 1);
 	node->next = NULL;
 	return (node);
 }

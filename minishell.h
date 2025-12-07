@@ -6,7 +6,7 @@
 /*   By: aareslan <aareslan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 16:44:29 by aareslan          #+#    #+#             */
-/*   Updated: 2025/12/02 21:43:42 by aareslan         ###   ########.fr       */
+/*   Updated: 2025/12/07 17:57:31 by aareslan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,10 +88,12 @@ int			get_exit_status(void);
 /* utils */
 int			ft_strlen(const char *str);
 char		*ft_strdup(char *str);
+char		*ft_strndup(const char *s, size_t n);
 int			is_whitespace(char c);
 int			is_special_char(char c);
 int			ft_strcmp(char *s1, char *s2);
 int			ft_getpid(void);
+char		*ft_strchr(const char *s, int c);
 
 /* tokenization */
 void		free_tokens(char **tokens);
@@ -233,14 +235,22 @@ int			execute_builtin(char **args, char ***envp);
 /*builtins*/
 int			ft_cd(char **argv, char ***envp);
 int			is_n_flag(char *arg);
-int			ft_env(char **envp);
+int			ft_env(char **argv, char **envp);
 int			ft_export(char **argv, char ***envp);
 void		print_sorted_entry(char *entry);
 void		sort_env_array(char **sorted, int len);
-int			ft_pwd(void);
+int			ft_pwd(char **envp);
 int			ft_echo(char **argv);
 int			ft_exit(char **args);
 int			ft_unset(char **args, char ***envp);
+
+/* ft_cd helpers */
+char		*get_env_value(char **envp, const char *name);
+int			find_env_idx(char **envp, const char *name);
+char		*get_new_pwd_fallback(char *target, char ***envp);
+void		update_oldpwd(char ***envp, char *old_pwd);
+void		update_current_pwd(char ***envp, char *new_pwd);
+int			handle_cd_home(char **envp, char **target);
 
 /* environment management */
 char		**copy_environment(char **envp);
@@ -254,5 +264,6 @@ int			ft_atoi_shlvl(const char *str);
 int			handle_exit(char *input);
 int			handle_syntax_error(char **tokens);
 void		process_tokens(char **tokens, char ***envp);
+void		print_welcome_banner(void);
 
 #endif

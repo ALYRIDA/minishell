@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_helpme_1.c                                   :+:      :+:    :+:   */
+/*   string_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aareslan <aareslan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 16:44:14 by aareslan          #+#    #+#             */
-/*   Updated: 2025/11/09 11:20:40 by aareslan         ###   ########.fr       */
+/*   Updated: 2025/12/05 21:10:50 by aareslan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,4 +59,28 @@ void	*ft_memcpy(void *dest, const void *src, size_t n)
 		}
 	}
 	return (dest);
+}
+
+char	*ft_strndup(const char *s, size_t n)
+{
+	char	*dup;
+	size_t	len;
+	size_t	i;
+
+	if (!s)
+		return (NULL);
+	len = 0;
+	while (s[len] && len < n)
+		len++;
+	dup = malloc(len + 1);
+	if (!dup)
+		return (NULL);
+	i = 0;
+	while (i < len)
+	{
+		dup[i] = s[i];
+		i++;
+	}
+	dup[i] = '\0';
+	return (dup);
 }
