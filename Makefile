@@ -6,7 +6,7 @@
 #    By: aareslan <aareslan@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/02 16:44:09 by aareslan          #+#    #+#              #
-#    Updated: 2025/12/07 17:57:24 by aareslan         ###   ########.fr        #
+#    Updated: 2025/12/09 16:40:02 by aareslan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,7 @@ SRC = minishell.c \
 	signal_handler/signals.c \
 	signal_handler/signals1.c \
 	signal_handler/exit_status.c \
+	utils/banner.c \
 	utils/string_utils.c \
 	utils/token_skip_utils.c \
 	utils/char_compare_utils.c \
@@ -39,7 +40,6 @@ SRC = minishell.c \
 	utils/quote_marker_utils.c \
 	utils/env_copy_utils.c \
 	utils/env_free_utils.c \
-	utils/banner.c \
 	tokenizer/cleanup_tokens_utils.c \
 	tokenizer/count_tokens.c \
 	tokenizer/extract_operator.c \
@@ -66,6 +66,7 @@ SRC = minishell.c \
 	expander/handle_dollar.c \
 	executor/heredoc_executor.c \
 	executor/heredoc_utils.c \
+	executor/heredoc_fd_utils.c \
 	executor/heredoc_reader.c \
 	executor/heredoc_consumer.c \
 	executor/heredoc_consumer_utils.c \
@@ -115,7 +116,7 @@ banner:
 	@echo "██╔████╔██║██║██╔██╗ ██║██║███████╗███████║█████╗  ██║     ██║     "
 	@echo "██║╚██╔╝██║██║██║╚██╗██║██║╚════██║██╔══██║██╔══╝  ██║     ██║     "
 	@echo "██║ ╚═╝ ██║██║██║ ╚████║██║███████║██║  ██║███████╗███████╗███████╗"
-	@echo "╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝"
+	@echo "╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝╚══════╝╚═╝  ██║╚══════╝╚══════╝╚══════╝"
 	@echo "$(RESET)"
 	@echo "$(YELLOW)        🐚  Compiling Sirine and Aly Rida Minishell  🐚$(RESET)"
 	@echo ""

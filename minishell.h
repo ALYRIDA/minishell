@@ -6,7 +6,7 @@
 /*   By: aareslan <aareslan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 16:44:29 by aareslan          #+#    #+#             */
-/*   Updated: 2025/12/07 17:57:31 by aareslan         ###   ########.fr       */
+/*   Updated: 2025/12/09 15:29:59 by aareslan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,10 @@ int			get_signal(void);
 void		reset_signal(void);
 void		set_exit_status(int status);
 int			get_exit_status(void);
+
+/* heredoc fd utils */
+int			setup_heredoc_fds(int pipe_fd, int *saved_stdin, int *saved_stdout);
+void		restore_fds(int saved_stdin, int saved_stdout);
 
 /* utils */
 int			ft_strlen(const char *str);
@@ -264,6 +268,8 @@ int			ft_atoi_shlvl(const char *str);
 int			handle_exit(char *input);
 int			handle_syntax_error(char **tokens);
 void		process_tokens(char **tokens, char ***envp);
+
+/* banner */
 void		print_welcome_banner(void);
 
 #endif
