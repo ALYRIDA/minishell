@@ -1,293 +1,84 @@
-🐚 Minishell
+# Minishell
 
-A minimal Bash-like shell implemented in C
-42 Beirut — Milestone 3
+> A minimalistic, POSIX-compliant shell implementation built in C.
 
-📖 Overview
+**Project**: 42 Beirut — Curriculum Milestone 4  
+**Status**: Complete  
 
-Minishell is a small Unix shell that recreates essential features of Bash, including:
+---
 
-Tokenizing user input
+## 📌 Overview
 
-Parsing and building an Abstract Syntax Tree (AST)
+Minishell is a lightweight Unix shell implementation designed from scratch. It recreates essential Bash functionality, demonstrating core concepts of system programming, process creation, file descriptor manipulation, and memory management.
 
-Environment variable expansion
+This project parses user input, builds an Abstract Syntax Tree (AST), handles environment variable expansions, and executes commands safely without memory leaks.
 
-Executing commands with pipes and redirections
+## ✨ Features
 
-Handling built-ins
+- **Prompt & History**: Interactive prompt with GNU Readline support and command history.
+- **Execution**: Runs executables from absolute, relative, or environment `PATH`.
+- **Pipelines (`|`)**: Seamlessly connects multiple commands, executing them concurrently.
+- **Redirections (`>`, `>>`, `<`, `<<`)**: Full support for input, output, append, and heredoc.
+- **Expansions**: Handles environment variables (`$VAR`) and exit status (`$?`).
+- **Quotes**: Accurate interpretation of single (`'`) and double (`"`) quotes.
+- **Signals**: Accurate handling of `Ctrl+C`, `Ctrl+D`, and `Ctrl+\` identical to Bash.
 
-Managing signals
+## 🛠️ Built-in Commands
 
-Supporting heredocs
+| Command | Description |
+|---------|-------------|
+| `echo`  | Prints arguments (supports `-n` flag). |
+| `cd`    | Changes the current directory. |
+| `pwd`   | Prints the current working directory. |
+| `export`| Sets or updates environment variables. |
+| `unset` | Removes environment variables. |
+| `env`   | Displays the current environment variables. |
+| `exit`  | Exits the shell, with an optional exit code. |
 
-This project offers deep insights into how real shells work internally.
+## 🚀 Getting Started
 
-✨ Features
-🔹 Core Shell Capabilities
+### Prerequisites
 
-🖥️ Interactive colored prompt using Readline
+- A POSIX-compliant operating system (Linux, macOS)
+- `gcc` or `clang` compiler
+- `make`
+- GNU `readline` library
 
-📝 Command history
+### Installation
 
-⚙️ Execution of binaries (PATH or absolute)
+1. **Clone the repository:**
+   ```bash
+   git clone <your_repository_url>
+   cd minishell
+   ```
 
-⚡ Pipelines (cmd1 | cmd2 | ...)
+2. **Compile the project:**
+   ```bash
+   make
+   ```
 
-📥 Redirections (<, >, >>, <<)
+3. **Run the shell:**
+   ```bash
+   ./minishell
+   ```
 
-🔄 Environment variable expansion ($VAR, $?)
+## 🏗️ Architecture Overview
 
-🧩 Proper quote handling
+The shell operates in a structured pipeline:
 
-🛑 Bash-like signal behavior (Ctrl+C, Ctrl+D, Ctrl+\)
+1. **Lexer / Tokenizer**: Reads the raw input string and divides it into a linked list of tokens (commands, arguments, pipes, redirections).
+2. **Parser**: Analyzes the tokens and constructs an Abstract Syntax Tree (AST), ensuring syntactic correctness.
+3. **Expander**: Replaces environment variables (`$USER`, `$?`) with their actual values, respecting quote rules.
+4. **Executor**: Traverses the AST recursively, setting up pipes, managing file descriptors, forking child processes, and executing commands via `execve` or built-in functions.
 
-🧹 Full memory-safe implementation (no leaks)
+## 📜 42 Curriculum Standards
 
-🔹 Built-in Commands
-Built-in	Description
-echo	Print text (-n supported)
-cd	Change directory
-pwd	Print working directory
-export	Add/update environment variables
-unset	Remove environment variables
-env	Display environment variables
-exit	Exit the shell
-🧠 Internal Architecture
+This project strictly adheres to the 42 School guidelines:
+- Written in **C**.
+- Complies with the **Norminette** standard.
+- **Zero memory leaks** (strictly verified via Valgrind).
+- No undefined behavior.
+- Efficient memory allocation and robust error handling.
 
-Here’s how Minishell processes a command from input → output.
-
-1️⃣ Tokenization
-
-The tokenizer splits user input into tokens while respecting:
-
-Quotes
-
-Special operators
-
-Whitespace
-
-Environment variables
-
-Example
-
-Input:
-
-echo "hello world" | grep hello > out.txt
-
-
-Tokenizer output:
-
-[ECHO] ["hello world"] [|] [GREP] [hello] [>] [out.txt]
-
-
-The tokenizer:
-
-Detects operators
-
-Handles quoting
-
-Expands simple tokens
-
-Produces a linked-list of tokens
-
-2️⃣ Parsing → AST (Abstract Syntax Tree)
-
-Tokens are transformed into a syntax tree representing:
-
-Commands
-
-Pipelines
-
-Redirections
-
-Example AST
-
-          PIPE
-         /    \
-   COMMAND     REDIR_OUT
-  (ls -l)       \
-                 COMMAND
-                (grep .c)
-
-
-The AST makes execution deterministic and structured.
-
-3️⃣ Expansion
-
-Before execution, Minishell expands:
-
-$VAR environment variables
-
-$? exit status
-
-Double-quoted strings
-
-Removes quotes correctly
-
-Example:
-
-echo "$USER lives here"
-
-
-Expands to:
-
-echo ["aly lives here"]
-
-4️⃣ Execution
-
-The executor walks the AST to run:
-
-Pipelines
-
-Commands
-
-Built-ins
-
-Redirections
-
-Execution steps:
-
-Build pipes
-
-Fork processes
-
-Duplicate FDs with dup2
-
-Run built-ins directly or call execve for external programs
-
-5️⃣ Built-ins
-
-Built-ins run without forking when needed, so they can modify shell state.
-
-Examples:
-
-cd changes the current directory
-
-export updates environment variables
-
-exit terminates the shell
-
-6️⃣ Redirections
-
-Minishell supports:
-
-🔸 Output
-cmd > file
-
-🔸 Append
-cmd >> file
-
-🔸 Input
-cmd < file
-
-🔸 Heredoc
-cmd << EOF
-
-
-The heredoc:
-
-Reads lines until the delimiter
-
-Stores content in a pipe or temp file
-
-Feeds it to the command’s STDIN
-
-7️⃣ Pipelines
-
-Example:
-
-a | b | c
-
-
-Execution:
-
-Connects a stdout → b stdin
-
-Connects b stdout → c stdin
-
-Processes run sequentially but execute concurrently
-
-🧪 Usage Examples
-minishell$ ls -la
-minishell$ ls | grep ".c"
-minishell$ echo hello > x.txt
-minishell$ cat < x.txt | wc -l
-minishell$ cat << EOF
-> hi
-> EOF
-
-🧱 Project Structure
-minishell/
-├── minishell.c
-├── minishell.h
-├── Makefile
-│
-├── tokenizer/
-│   ├── tokenizer.c
-│   ├── extract_*.c
-│   ├── syntax_checker.c
-│   └── cleanup_tokens*.c
-│
-├── parser/
-│   ├── parser.c
-│   ├── parse_command.c
-│   ├── parse_pipeline.c
-│   └── parse_redirection.c
-│
-├── expander/
-│   ├── expand_tokens.c
-│   ├── expand_variables.c
-│   ├── expand_exit_code.c
-│   └── handle_dollar.c
-│
-├── executor/
-│   ├── ast_executor.c
-│   ├── cmd_executor.c
-│   ├── builtin_executor.c
-│   ├── pipeline_executor.c
-│   ├── redir_executor.c
-│   ├── heredoc_*.c
-│   └── cmd_path_resolver.c
-│
-└── utils/
-    ├── string_utils.c
-    ├── env_*.c
-    ├── char_*.c
-    └── banner.c
-
-📚 What We Learned
-
-Shell architecture
-
-Lexing & tokenization
-
-AST parsing
-
-File descriptors & IO
-
-Pipe creation and management
-
-Signals in interactive programs
-
-Environment storage & manipulation
-
-Memory-safe C design
-
-👥 Authors
-
-Sirine & Aly Rida
-42 Beirut Students
-
-GitHub: @ALYRIDA
-
-🙏 Acknowledgments
-
-42 Beirut
-
-The original Unix shell developers
-
-GNU Bash for inspiration
-
-❤️ Made with love at 42 Beirut
-If you like the project, consider starring ⭐ the repo!
+---
+*Developed for the 42 Beirut core curriculum.*
