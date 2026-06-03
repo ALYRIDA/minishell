@@ -7,13 +7,13 @@
 
 ---
 
-## 📌 Overview
+## Overview
 
 Minishell is a lightweight Unix shell implementation designed from scratch. It recreates essential Bash functionality, demonstrating core concepts of system programming, process creation, file descriptor manipulation, and memory management.
 
 This project parses user input, builds an Abstract Syntax Tree (AST), handles environment variable expansions, and executes commands safely without memory leaks.
 
-## ✨ Features
+## Features
 
 - **Prompt & History**: Interactive prompt with GNU Readline support and command history.
 - **Execution**: Runs executables from absolute, relative, or environment `PATH`.
@@ -23,7 +23,7 @@ This project parses user input, builds an Abstract Syntax Tree (AST), handles en
 - **Quotes**: Accurate interpretation of single (`'`) and double (`"`) quotes.
 - **Signals**: Accurate handling of `Ctrl+C`, `Ctrl+D`, and `Ctrl+\` identical to Bash.
 
-## 🛠️ Built-in Commands
+## Built-in Commands
 
 | Command | Description |
 |---------|-------------|
@@ -35,7 +35,7 @@ This project parses user input, builds an Abstract Syntax Tree (AST), handles en
 | `env`   | Displays the current environment variables. |
 | `exit`  | Exits the shell, with an optional exit code. |
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -62,7 +62,7 @@ This project parses user input, builds an Abstract Syntax Tree (AST), handles en
    ./minishell
    ```
 
-## 🏗️ Architecture Overview
+## Architecture Overview
 
 The shell operates in a structured pipeline:
 
@@ -71,7 +71,7 @@ The shell operates in a structured pipeline:
 3. **Expander**: Replaces environment variables (`$USER`, `$?`) with their actual values, respecting quote rules.
 4. **Executor**: Traverses the AST recursively, setting up pipes, managing file descriptors, forking child processes, and executing commands via `execve` or built-in functions.
 
-## 📜 42 Curriculum Standards
+## 42 Curriculum Standards
 
 This project strictly adheres to the 42 School guidelines:
 - Written in **C**.
